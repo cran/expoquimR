@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>UNE-EN 689: Quantitative Statistical Exposure Assessment</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+
+<style type="text/css">
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+</style>
+
+
+
+<style type="text/css">
+code {
+white-space: pre;
+}
+.sourceCode {
+overflow: visible;
+}
+</style>
+<style type="text/css" data-origin="pandoc">
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+{ counter-reset: source-line 0; }
+pre.numberSource code > span
+{ position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+color: #aaaaaa;
+}
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+div.sourceCode
+{ }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } 
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.at { color: #7d9029; } 
+code span.bn { color: #40a070; } 
+code span.bu { color: #008000; } 
+code span.cf { color: #007020; font-weight: bold; } 
+code span.ch { color: #4070a0; } 
+code span.cn { color: #880000; } 
+code span.co { color: #60a0b0; font-style: italic; } 
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.do { color: #ba2121; font-style: italic; } 
+code span.dt { color: #902000; } 
+code span.dv { color: #40a070; } 
+code span.er { color: #ff0000; font-weight: bold; } 
+code span.ex { } 
+code span.fl { color: #40a070; } 
+code span.fu { color: #06287e; } 
+code span.im { color: #008000; font-weight: bold; } 
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.kw { color: #007020; font-weight: bold; } 
+code span.op { color: #666666; } 
+code span.ot { color: #007020; } 
+code span.pp { color: #bc7a00; } 
+code span.sc { color: #4070a0; } 
+code span.ss { color: #bb6688; } 
+code span.st { color: #4070a0; } 
+code span.va { color: #19177c; } 
+code span.vs { color: #4070a0; } 
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } 
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    var j = 0;
+    while (j < rules.length) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") {
+        j++;
+        continue;
+      }
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') {
+        j++;
+        continue;
+      }
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">UNE-EN 689: Quantitative Statistical
+Exposure Assessment</h1>
+
+
+
+<div id="overview" class="section level2">
+<h2>Overview</h2>
+<p>UNE-EN 689 is a European standard that defines a two-stage
+statistical procedure for comparing measured occupational exposure
+levels against occupational exposure limits (OELs). It is designed to
+provide a statistically rigorous and reproducible conformity decision
+based on a representative set of exposure measurements collected over
+multiple working days.</p>
+<p>The standard assumes that daily exposure (ED) values follow a
+<strong>lognormal or normal distribution</strong> and uses a
+<strong>one-sided upper tolerance limit</strong> (LSC_{95,70}) to
+decide, with 95% confidence and 70% coverage, whether exposure is below
+the OEL.</p>
+</div>
+<div id="the-two-stage-procedure" class="section level2">
+<h2>The two-stage procedure</h2>
+<div id="stage-1-preliminary-assessment-minimum-3-measurement-days" class="section level3">
+<h3>Stage 1: Preliminary assessment (minimum 3 measurement days)</h3>
+<p>Each measurement day produces one or more samples. The daily exposure
+ED is calculated as the time-weighted average over an 8-hour shift. The
+exposure index IE = ED / OEL is then computed for each day.</p>
+<p>Decision rules:</p>
+<table>
+<thead>
+<tr class="header">
+<th>Condition</th>
+<th>Outcome</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>All IE &lt; 0.1</td>
+<td><strong>CONFORMITY</strong> — exposure is well below the OEL</td>
+</tr>
+<tr class="even">
+<td>Any IE &gt; 1</td>
+<td><strong>NON-CONFORMITY</strong> — at least one day exceeds the
+OEL</td>
+</tr>
+<tr class="odd">
+<td>Any IE between 0.1 and 1</td>
+<td><strong>NO DECISION</strong> — proceed to Stage 2</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="stage-2-statistical-assessment-minimum-6-measurement-days-total" class="section level3">
+<h3>Stage 2: Statistical assessment (minimum 6 measurement days
+total)</h3>
+<p>The full set of ED values (preliminary + additional days) is fitted
+to a lognormal or normal distribution using the Shapiro-Wilk test. The
+one-sided upper tolerance limit LSC_{95,70} is then compared against the
+OEL via the risk index UR. If UR ≥ UT (tabulated tolerance factor),
+conformity is declared.</p>
+</div>
+</div>
+<div id="stage-1-example" class="section level2">
+<h2>Stage 1 example</h2>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="co"># Five samples across three working days</span></span>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a>  <span class="at">day           =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">3</span>),</span>
+<span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a>  <span class="at">concentration =</span> <span class="fu">c</span>(<span class="dv">12</span>, <span class="dv">8</span>, <span class="dv">9</span>, <span class="dv">5</span>, <span class="dv">6</span>),   <span class="co"># mg/m³</span></span>
+<span id="cb1-5"><a href="#cb1-5" tabindex="-1"></a>  <span class="at">time          =</span> <span class="fu">c</span>(<span class="dv">4</span>,  <span class="dv">4</span>, <span class="dv">8</span>, <span class="dv">3</span>, <span class="dv">5</span>)    <span class="co"># hours</span></span>
+<span id="cb1-6"><a href="#cb1-6" tabindex="-1"></a>)</span>
+<span id="cb1-7"><a href="#cb1-7" tabindex="-1"></a></span>
+<span id="cb1-8"><a href="#cb1-8" tabindex="-1"></a>res_pre <span class="ot">&lt;-</span> <span class="fu">une689_evaluate_preliminary</span>(data, <span class="at">vla =</span> <span class="dv">10</span>)</span>
+<span id="cb1-9"><a href="#cb1-9" tabindex="-1"></a>res_pre<span class="sc">$</span>days_table</span>
+<span id="cb1-10"><a href="#cb1-10" tabindex="-1"></a><span class="co">#&gt;   day     ED     IE</span></span>
+<span id="cb1-11"><a href="#cb1-11" tabindex="-1"></a><span class="co">#&gt; 1   1 10.000 1.0000</span></span>
+<span id="cb1-12"><a href="#cb1-12" tabindex="-1"></a><span class="co">#&gt; 2   2  9.000 0.9000</span></span>
+<span id="cb1-13"><a href="#cb1-13" tabindex="-1"></a><span class="co">#&gt; 3   3  5.625 0.5625</span></span>
+<span id="cb1-14"><a href="#cb1-14" tabindex="-1"></a>res_pre<span class="sc">$</span>result</span>
+<span id="cb1-15"><a href="#cb1-15" tabindex="-1"></a><span class="co">#&gt; [1] &quot;NO DECISION&quot;</span></span></code></pre></div>
+<div id="step-by-step" class="section level3">
+<h3>Step-by-step</h3>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="co"># Daily exposure for day 1 (two samples)</span></span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a><span class="fu">une689_daily_exposure</span>(<span class="at">concentration =</span> <span class="fu">c</span>(<span class="dv">12</span>, <span class="dv">8</span>), <span class="at">time =</span> <span class="fu">c</span>(<span class="dv">4</span>, <span class="dv">4</span>))</span>
+<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a><span class="co">#&gt; [1] 10</span></span>
+<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a></span>
+<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a><span class="co"># Exposure index</span></span>
+<span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a><span class="fu">une689_exposure_index</span>(<span class="at">ed =</span> <span class="dv">10</span>, <span class="at">vla =</span> <span class="dv">10</span>)</span>
+<span id="cb2-7"><a href="#cb2-7" tabindex="-1"></a><span class="co">#&gt; [1] 1</span></span>
+<span id="cb2-8"><a href="#cb2-8" tabindex="-1"></a></span>
+<span id="cb2-9"><a href="#cb2-9" tabindex="-1"></a><span class="co"># Classify conformity from a set of IE values</span></span>
+<span id="cb2-10"><a href="#cb2-10" tabindex="-1"></a><span class="fu">une689_classify_conformity</span>(<span class="fu">c</span>(<span class="fl">1.0</span>, <span class="fl">0.9</span>, <span class="fl">0.5625</span>))</span>
+<span id="cb2-11"><a href="#cb2-11" tabindex="-1"></a><span class="co">#&gt; [1] &quot;NO DECISION&quot;</span></span></code></pre></div>
+</div>
+</div>
+<div id="stage-2-example" class="section level2">
+<h2>Stage 2 example</h2>
+<p>When the preliminary assessment returns NO DECISION, additional
+measurement days are collected and the full statistical assessment is
+performed on the combined dataset.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="co"># Six ED values (3 preliminary + 3 additional)</span></span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a>eds <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">10</span>, <span class="dv">9</span>, <span class="fl">5.625</span>, <span class="dv">11</span>, <span class="dv">8</span>, <span class="dv">13</span>)</span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a></span>
+<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a>res_est <span class="ot">&lt;-</span> <span class="fu">une689_evaluate_statistical</span>(eds, <span class="at">vla =</span> <span class="dv">10</span>)</span>
+<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a></span>
+<span id="cb3-6"><a href="#cb3-6" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">&quot;Distribution:&quot;</span>, res_est<span class="sc">$</span>distribution_type, <span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span>)</span>
+<span id="cb3-7"><a href="#cb3-7" tabindex="-1"></a><span class="co">#&gt; Distribution: Lognormal</span></span>
+<span id="cb3-8"><a href="#cb3-8" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">&quot;MG =&quot;</span>,  <span class="fu">round</span>(res_est<span class="sc">$</span>MG,  <span class="dv">3</span>), <span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span>)</span>
+<span id="cb3-9"><a href="#cb3-9" tabindex="-1"></a><span class="co">#&gt; MG = 9.13</span></span>
+<span id="cb3-10"><a href="#cb3-10" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">&quot;DSG =&quot;</span>, <span class="fu">round</span>(res_est<span class="sc">$</span>DSG, <span class="dv">3</span>), <span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span>)</span>
+<span id="cb3-11"><a href="#cb3-11" tabindex="-1"></a><span class="co">#&gt; DSG = 1.336</span></span>
+<span id="cb3-12"><a href="#cb3-12" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">&quot;UT =&quot;</span>,  res_est<span class="sc">$</span>ut, <span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span>)</span>
+<span id="cb3-13"><a href="#cb3-13" tabindex="-1"></a><span class="co">#&gt; UT = 2.187</span></span>
+<span id="cb3-14"><a href="#cb3-14" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">&quot;LSC(95,70) =&quot;</span>, <span class="fu">round</span>(res_est<span class="sc">$</span>lsc, <span class="dv">3</span>), <span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span>)</span>
+<span id="cb3-15"><a href="#cb3-15" tabindex="-1"></a><span class="co">#&gt; LSC(95,70) = 17.21</span></span>
+<span id="cb3-16"><a href="#cb3-16" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">&quot;UR =&quot;</span>,  <span class="fu">round</span>(res_est<span class="sc">$</span>ur, <span class="dv">3</span>), <span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span>)</span>
+<span id="cb3-17"><a href="#cb3-17" tabindex="-1"></a><span class="co">#&gt; UR = 0.314</span></span>
+<span id="cb3-18"><a href="#cb3-18" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">&quot;Result:&quot;</span>, res_est<span class="sc">$</span>conformity, <span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span>)</span>
+<span id="cb3-19"><a href="#cb3-19" tabindex="-1"></a><span class="co">#&gt; Result: NON-CONFORMITY</span></span></code></pre></div>
+<div id="step-by-step-1" class="section level3">
+<h3>Step-by-step</h3>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="co"># Descriptive statistics</span></span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a>est <span class="ot">&lt;-</span> <span class="fu">une689_statistics</span>(eds)</span>
+<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a>est<span class="sc">$</span>MG; est<span class="sc">$</span>DSG</span>
+<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a><span class="co">#&gt; [1] 9.129882</span></span>
+<span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a><span class="co">#&gt; [1] 1.33626</span></span>
+<span id="cb4-6"><a href="#cb4-6" tabindex="-1"></a></span>
+<span id="cb4-7"><a href="#cb4-7" tabindex="-1"></a><span class="co"># Normality and lognormality tests</span></span>
+<span id="cb4-8"><a href="#cb4-8" tabindex="-1"></a>test <span class="ot">&lt;-</span> <span class="fu">une689_normality_test</span>(eds)</span>
+<span id="cb4-9"><a href="#cb4-9" tabindex="-1"></a>test<span class="sc">$</span>pval_lognormal</span>
+<span id="cb4-10"><a href="#cb4-10" tabindex="-1"></a><span class="co">#&gt; [1] 0.8702792</span></span>
+<span id="cb4-11"><a href="#cb4-11" tabindex="-1"></a></span>
+<span id="cb4-12"><a href="#cb4-12" tabindex="-1"></a><span class="co"># Distribution type (lognormal has priority)</span></span>
+<span id="cb4-13"><a href="#cb4-13" tabindex="-1"></a>distribution_type <span class="ot">&lt;-</span> <span class="fu">une689_distribution_type</span>(</span>
+<span id="cb4-14"><a href="#cb4-14" tabindex="-1"></a>  <span class="at">pval_normal    =</span> test<span class="sc">$</span>pval_normal,</span>
+<span id="cb4-15"><a href="#cb4-15" tabindex="-1"></a>  <span class="at">pval_lognormal =</span> test<span class="sc">$</span>pval_lognormal</span>
+<span id="cb4-16"><a href="#cb4-16" tabindex="-1"></a>)</span>
+<span id="cb4-17"><a href="#cb4-17" tabindex="-1"></a>distribution_type</span>
+<span id="cb4-18"><a href="#cb4-18" tabindex="-1"></a><span class="co">#&gt; [1] &quot;Lognormal&quot;</span></span>
+<span id="cb4-19"><a href="#cb4-19" tabindex="-1"></a></span>
+<span id="cb4-20"><a href="#cb4-20" tabindex="-1"></a><span class="co"># Tolerance factor UT for n = 6</span></span>
+<span id="cb4-21"><a href="#cb4-21" tabindex="-1"></a><span class="fu">une689_ut</span>(<span class="dv">6</span>)</span>
+<span id="cb4-22"><a href="#cb4-22" tabindex="-1"></a><span class="co">#&gt; [1] 2.187</span></span>
+<span id="cb4-23"><a href="#cb4-23" tabindex="-1"></a></span>
+<span id="cb4-24"><a href="#cb4-24" tabindex="-1"></a><span class="co"># LSC(95,70)</span></span>
+<span id="cb4-25"><a href="#cb4-25" tabindex="-1"></a><span class="fu">une689_lsc</span>(distribution_type, <span class="at">ut =</span> <span class="fu">une689_ut</span>(<span class="dv">6</span>), <span class="at">MG =</span> est<span class="sc">$</span>MG, <span class="at">DSG =</span> est<span class="sc">$</span>DSG)</span>
+<span id="cb4-26"><a href="#cb4-26" tabindex="-1"></a><span class="co">#&gt; [1] 17.2103</span></span>
+<span id="cb4-27"><a href="#cb4-27" tabindex="-1"></a></span>
+<span id="cb4-28"><a href="#cb4-28" tabindex="-1"></a><span class="co"># Risk index UR</span></span>
+<span id="cb4-29"><a href="#cb4-29" tabindex="-1"></a><span class="fu">une689_ur</span>(distribution_type, <span class="at">vla =</span> <span class="dv">10</span>, <span class="at">MG =</span> est<span class="sc">$</span>MG, <span class="at">DSG =</span> est<span class="sc">$</span>DSG)</span>
+<span id="cb4-30"><a href="#cb4-30" tabindex="-1"></a><span class="co">#&gt; [1] 0.3140406</span></span>
+<span id="cb4-31"><a href="#cb4-31" tabindex="-1"></a></span>
+<span id="cb4-32"><a href="#cb4-32" tabindex="-1"></a><span class="co"># Conformity decision</span></span>
+<span id="cb4-33"><a href="#cb4-33" tabindex="-1"></a><span class="fu">une689_statistical_conformity</span>(<span class="at">ur =</span> <span class="fu">une689_ur</span>(distribution_type, <span class="at">vla =</span> <span class="dv">10</span>,</span>
+<span id="cb4-34"><a href="#cb4-34" tabindex="-1"></a>                                               <span class="at">MG =</span> est<span class="sc">$</span>MG, <span class="at">DSG =</span> est<span class="sc">$</span>DSG),</span>
+<span id="cb4-35"><a href="#cb4-35" tabindex="-1"></a>                                <span class="at">ut =</span> <span class="fu">une689_ut</span>(<span class="dv">6</span>))</span>
+<span id="cb4-36"><a href="#cb4-36" tabindex="-1"></a><span class="co">#&gt; [1] &quot;NON-CONFORMITY&quot;</span></span></code></pre></div>
+</div>
+</div>
+<div id="periodic-assessment-monitoring-interval" class="section level2">
+<h2>Periodic assessment (monitoring interval)</h2>
+<p>Once conformity has been established, the standard requires defining
+how frequently measurements should be repeated. Two options are
+available:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a><span class="co"># Option 1: MG or MA versus the OEL</span></span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a><span class="fu">une689_monitoring_interval_opt1</span>(<span class="at">reference_value =</span> res_est<span class="sc">$</span>MG, <span class="at">vla =</span> <span class="dv">10</span>)</span>
+<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a><span class="co">#&gt; [1] &quot;Recommended monitoring interval: 12 months&quot;</span></span>
+<span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a></span>
+<span id="cb5-5"><a href="#cb5-5" tabindex="-1"></a><span class="co"># Option 2: LSC(95,70) versus the OEL</span></span>
+<span id="cb5-6"><a href="#cb5-6" tabindex="-1"></a><span class="fu">une689_monitoring_interval_opt2</span>(<span class="at">lsc =</span> res_est<span class="sc">$</span>lsc, <span class="at">vla =</span> <span class="dv">10</span>)</span>
+<span id="cb5-7"><a href="#cb5-7" tabindex="-1"></a><span class="co">#&gt; [1] &quot;Not recommended. Exposure must be reviewed.&quot;</span></span></code></pre></div>
+</div>
+<div id="additive-effects" class="section level2">
+<h2>Additive effects</h2>
+<p>When workers are simultaneously exposed to multiple agents affecting
+the same target organ, the European standard requires that the
+<strong>combined exposure index</strong> be evaluated:</p>
+<pre><code>IE_combined = IE_agent1 + IE_agent2 + ... + IE_agentN</code></pre>
+<p>Conformity requires IE_combined ≤ 1. For example, if toluene (IE =
+0.20) and xylene (IE = 0.30) both affect the central nervous system:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a>ie_toluene <span class="ot">&lt;-</span> <span class="fl">0.20</span></span>
+<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a>ie_xylene  <span class="ot">&lt;-</span> <span class="fl">0.30</span></span>
+<span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a>ie_combined <span class="ot">&lt;-</span> ie_toluene <span class="sc">+</span> ie_xylene</span>
+<span id="cb7-4"><a href="#cb7-4" tabindex="-1"></a></span>
+<span id="cb7-5"><a href="#cb7-5" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">&quot;Combined IE:&quot;</span>, ie_combined, <span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span>)</span>
+<span id="cb7-6"><a href="#cb7-6" tabindex="-1"></a><span class="co">#&gt; Combined IE: 0.5</span></span>
+<span id="cb7-7"><a href="#cb7-7" tabindex="-1"></a><span class="fu">une689_classify_conformity</span>(ie_combined)</span>
+<span id="cb7-8"><a href="#cb7-8" tabindex="-1"></a><span class="co">#&gt; [1] &quot;NO DECISION&quot;</span></span></code></pre></div>
+<p>Agents can appear in more than one additive group if they affect
+multiple target organs. The <code>une689_from_excel()</code> function
+and the Shiny application handle multiple independent additive groups
+automatically.</p>
+</div>
+<div id="from-excel-no-coding-required" class="section level2">
+<h2>From Excel (no coding required)</h2>
+<p>The UNE-EN 689 Excel template has three sheets:</p>
+<ul>
+<li><strong>Agents</strong>: agent name and VLA, one row per agent.</li>
+<li><strong>Measurements</strong>: one row per sample, with a
+<code>type</code> field (<code>pre</code> for preliminary days,
+<code>add</code> for additional days).</li>
+<li><strong>Additive_effects</strong> (optional): groups of agents
+sharing a target organ.</li>
+</ul>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a>ruta <span class="ot">&lt;-</span> <span class="fu">system.file</span>(<span class="st">&quot;plantillas&quot;</span>, <span class="st">&quot;plantilla_une689.xlsx&quot;</span>, <span class="at">package =</span> <span class="st">&quot;expoquimR&quot;</span>)</span>
+<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a>res <span class="ot">&lt;-</span> <span class="fu">une689_from_excel</span>(ruta)</span>
+<span id="cb8-3"><a href="#cb8-3" tabindex="-1"></a></span>
+<span id="cb8-4"><a href="#cb8-4" tabindex="-1"></a><span class="co"># Preliminary results and statistical assessment per agent</span></span>
+<span id="cb8-5"><a href="#cb8-5" tabindex="-1"></a>res<span class="sc">$</span>preliminary<span class="sc">$</span>Toluene<span class="sc">$</span>result</span>
+<span id="cb8-6"><a href="#cb8-6" tabindex="-1"></a>res<span class="sc">$</span>preliminary<span class="sc">$</span>Toluene<span class="sc">$</span>statistics<span class="sc">$</span>conformity</span>
+<span id="cb8-7"><a href="#cb8-7" tabindex="-1"></a></span>
+<span id="cb8-8"><a href="#cb8-8" tabindex="-1"></a><span class="co"># Additive effects table</span></span>
+<span id="cb8-9"><a href="#cb8-9" tabindex="-1"></a>res<span class="sc">$</span>additive</span></code></pre></div>
+</div>
+<div id="language" class="section level2">
+<h2>Language</h2>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a><span class="fu">expoquimr_lang</span>(<span class="st">&quot;es&quot;</span>)</span>
+<span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a><span class="fu">une689_classify_conformity</span>(<span class="fu">c</span>(<span class="fl">0.02</span>, <span class="fl">0.05</span>))</span>
+<span id="cb9-3"><a href="#cb9-3" tabindex="-1"></a><span class="co">#&gt; [1] &quot;CONFORMIDAD&quot;</span></span>
+<span id="cb9-4"><a href="#cb9-4" tabindex="-1"></a><span class="fu">une689_distribution_type</span>(<span class="fl">0.5</span>, <span class="fl">0.5</span>)</span>
+<span id="cb9-5"><a href="#cb9-5" tabindex="-1"></a><span class="co">#&gt; [1] &quot;Lognormal&quot;</span></span>
+<span id="cb9-6"><a href="#cb9-6" tabindex="-1"></a><span class="fu">une689_monitoring_interval_opt1</span>(<span class="fl">0.5</span>, <span class="at">vla =</span> <span class="dv">10</span>)</span>
+<span id="cb9-7"><a href="#cb9-7" tabindex="-1"></a><span class="co">#&gt; [1] &quot;Periodicidad recomendada: 36 meses&quot;</span></span>
+<span id="cb9-8"><a href="#cb9-8" tabindex="-1"></a><span class="fu">expoquimr_lang</span>(<span class="st">&quot;en&quot;</span>)</span></code></pre></div>
+</div>
+<div id="interactive-application" class="section level2">
+<h2>Interactive application</h2>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a><span class="fu">run_une689</span>()</span></code></pre></div>
+<p>The UNE-EN 689 Shiny application supports:</p>
+<ul>
+<li>Multiple chemical agents, each with its own tab and independent
+measurement days.</li>
+<li>Sequential workflow: preliminary assessment → automatic unlock of
+additional days on NO DECISION → statistical assessment → periodic
+assessment.</li>
+<li>Independent additive effect groups: users define which agents share
+a target organ, and agents can appear in more than one group.</li>
+</ul>
+</div>
+<div id="methodological-note" class="section level2">
+<h2>Methodological note</h2>
+<p>A known implementation error in some versions of this standard
+involves the use of <code>all(IE &lt; 0.1, na.rm = TRUE)</code> to test
+conformity. In R, <code>all()</code> on an empty vector returns
+<code>TRUE</code>, which would incorrectly declare conformity when no
+valid IE values are available. <code>expoquimR</code> corrects this by
+returning <code>NA</code> from <code>une689_classify_conformity()</code>
+when the input contains no valid IE values.</p>
+</div>
+<div id="references" class="section level2">
+<h2>References</h2>
+<ul>
+<li>AENOR. <em>UNE-EN 689:2019. Workplace exposure — Measurement of
+exposure by inhalation to chemical agents — Strategy for testing
+compliance with occupational exposure limit values.</em> Madrid:
+AENOR.</li>
+<li>European Committee for Standardisation (CEN). <em>EN
+689:2018.</em></li>
+</ul>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
