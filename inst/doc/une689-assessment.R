@@ -71,6 +71,15 @@ une689_statistical_conformity(ur = une689_ur(distribution_type, vla = 10,
                                                MG = est$MG, DSG = est$DSG),
                                 ut = une689_ut(6))
 
+## ----probability_data---------------------------------------------------------
+pd <- une689_probability_data(eds)
+
+pd$distribution
+pd$data[, c("k", "ed", "pk")]
+
+## ----probability_plot, eval = requireNamespace("ggplot2", quietly = TRUE), fig.alt = "Log-normal probability paper with the six daily exposure values and a fitted straight line."----
+une689_probability_plot(eds, vla = 10)
+
 ## ----periodic-----------------------------------------------------------------
 # Option 1: MG or MA versus the OEL
 une689_monitoring_interval_opt1(reference_value = res_est$MG, vla = 10)

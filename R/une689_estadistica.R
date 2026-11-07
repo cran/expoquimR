@@ -28,9 +28,13 @@ une689_ut_table <- c(
 #'
 #' @export
 une689_ut <- function(n) {
-  if (is.na(n) || n < 6) return(NA_real_)
+  .assert_numeric_scalar(n, "n")
+  if (n != floor(n) || n < 0) {
+    stop("`n` must be a non-negative integer count.", call. = FALSE)
+  }
+  if (n < 6) return(NA_real_)
   if (n > 30) return(1.820)
-  unname(une689_ut_table[as.character(round(n))])
+  unname(une689_ut_table[as.character(n)])
 }
 
 #' Descriptive statistics of daily exposure (UNE-EN 689)
@@ -49,9 +53,13 @@ une689_ut <- function(n) {
 #'
 #' @export
 une689_statistics <- function(ed) {
-  if (any(is.na(ed)) || any(ed <= 0)) {
-    stop(.t("ed_positive"), call. = FALSE)
-  }
+  .assert_numeric_vector(
+    ed,
+    "ed",
+    allow_na = FALSE,
+    allow_empty = FALSE,
+    positive = TRUE
+  )
   log_ed <- log(ed)
   list(
     MA = mean(ed),
@@ -79,6 +87,21 @@ une689_statistics <- function(ed) {
 #'
 #' @export
 une689_normality_test <- function(ed) {
+  .assert_numeric_vector(
+    ed,
+    "ed",
+    allow_na = FALSE,
+    allow_empty = FALSE,
+    positive = TRUE
+  )
+
+  if (length(ed) < 3L || length(ed) > 5000L) {
+    stop(
+      "`ed` must contain between 3 and 5000 observations for the Shapiro-Wilk test.",
+      call. = FALSE
+    )
+  }
+
   test_normal <- stats::shapiro.test(ed)
   test_lognormal <- stats::shapiro.test(log(ed))
 
@@ -111,6 +134,14 @@ une689_normality_test <- function(ed) {
 #'
 #' @export
 une689_distribution_type <- function(pval_normal, pval_lognormal, alpha = 0.05) {
+  for (nm in c("pval_normal", "pval_lognormal", "alpha")) {
+    value <- get(nm)
+    .assert_numeric_scalar(value, nm)
+    if (value < 0 || value > 1 || (nm == "alpha" && (value == 0 || value == 1))) {
+      stop(sprintf("`%s` must be within its valid probability range.", nm),
+           call. = FALSE)
+    }
+  }
   if (pval_lognormal > alpha) {
     .t("une689_lognormal")
   } else if (pval_normal > alpha) {
@@ -164,10 +195,20 @@ une689_lsc <- function(distribution_type, ut, MA = NA_real_, DS = NA_real_, MG =
 #'
 #' @export
 une689_ur <- function(distribution_type, vla, MA = NA_real_, DS = NA_real_, MG = NA_real_, DSG = NA_real_) {
+  .assert_numeric_scalar(vla, "vla")
+  if (vla <= 0) stop("`vla` must be strictly positive.", call. = FALSE)
   # distribution_type uses internal English keys: "Lognormal", "Normal", "Neither"
   if (identical(distribution_type, .t("une689_lognormal")) || identical(distribution_type, "Lognormal")) {
+    .assert_numeric_scalar(MG, "MG")
+    .assert_numeric_scalar(DSG, "DSG")
+    if (MG <= 0 || DSG <= 1) {
+      stop("Lognormal UR requires MG > 0 and DSG > 1.", call. = FALSE)
+    }
     (log(vla) - log(MG)) / log(DSG)
   } else if (identical(distribution_type, .t("une689_normal")) || identical(distribution_type, "Normal")) {
+    .assert_numeric_scalar(MA, "MA")
+    .assert_numeric_scalar(DS, "DS")
+    if (DS <= 0) stop("Normal UR requires DS > 0.", call. = FALSE)
     (vla - MA) / DS
   } else {
     NA_real_
@@ -189,7 +230,10 @@ une689_ur <- function(distribution_type, vla, MA = NA_real_, DS = NA_real_, MG =
 #'
 #' @export
 une689_statistical_conformity <- function(ur, ut) {
-  if (is.na(ur)) return(NA_character_)
+  if (length(ur) == 1L && is.numeric(ur) && is.na(ur)) return(NA_character_)
+  .assert_numeric_scalar(ur, "ur")
+  .assert_numeric_scalar(ut, "ut")
+  if (ut <= 0) stop("`ut` must be positive.", call. = FALSE)
   if (ur >= ut) .t("une689_conformity") else .t("une689_no_conformity")
 }
 
@@ -214,12 +258,29 @@ une689_statistical_conformity <- function(ur, ut) {
 #'
 #' @export
 une689_evaluate_statistical <- function(ed, vla) {
+  .assert_numeric_scalar(vla, "vla")
+  if (vla <= 0) stop("`vla` must be strictly positive.", call. = FALSE)
+  .assert_numeric_vector(ed, "ed", positive = TRUE)
   n <- length(ed)
   if (!une689_validate_min_days(n, minimum = 6L)) {
     stop(.t("min_jornadas", 6L, n), call. = FALSE)
   }
 
   stats_ed <- une689_statistics(ed)
+  # EXPOQUIMR_CONSTANT_ED_GUARD_V1
+  # Una serie constante impide Shapiro-Wilk y no permite estimar la dispersion.
+  if (length(unique(ed)) == 1L) {
+    return(list(
+      n = n, distribution_type = "Neither",
+      MA = stats_ed$MA, DS = stats_ed$DS,
+      MG = stats_ed$MG, DSG = stats_ed$DSG,
+      W_normal = NA_real_, pval_normal = NA_real_,
+      W_lognormal = NA_real_, pval_lognormal = NA_real_,
+      ut = une689_ut(n), lsc = NA_real_, ur = NA_real_,
+      conformity = NA_character_,
+      diagnostic_status = "CONSTANT_EXPOSURES"
+    ))
+  }
   test <- une689_normality_test(ed)
   distribution_type <- une689_distribution_type(test$pval_normal, test$pval_lognormal)
   ut <- une689_ut(n)
@@ -293,4 +354,51 @@ une689_monitoring_interval_opt2 <- function(lsc, vla) {
   } else {
     .t("une689_period_review")
   }
+}
+
+# ---- rOpenSci statistical standards ----
+#' @srrstats {G1.3} Statistical terminology used by expoquimR is explicitly described in function documentation, the README, and the UNE-EN 689 vignette, including normal and lognormal distributions, Shapiro-Wilk testing, arithmetic and geometric summaries, tolerance limits, confidence and coverage, and risk indices.
+#' @noRd
+NULL
+# ---- end rOpenSci statistical standards ----
+
+#' Diagnostic comparison of normal and lognormal UNE-EN 689 models
+#'
+#' Returns both model calculations without selecting a normative distribution.
+#' The existing statistical assessment and its outputs are unchanged.
+#' @param ed Numeric vector of at least six positive, finite daily exposures.
+#' @param vla Positive, finite occupational exposure limit.
+#' @param alpha Shapiro-Wilk significance threshold, strictly between 0 and 1.
+#' @return A list containing models, discordant, and requires_review.
+#' @export
+une689_compare_distributions <- function(ed, vla, alpha = 0.05)
+ {
+  .assert_numeric_scalar(vla, 'vla')
+  .assert_numeric_scalar(alpha, 'alpha')
+  if (vla <= 0) stop('`vla` must be strictly positive.', call. = FALSE)
+  if (alpha <= 0 || alpha >= 1) stop('`alpha` must be between 0 and 1.', call. = FALSE)
+  .assert_numeric_vector(ed, 'ed', positive = TRUE)
+  n <- length(ed)
+  if (n < 6L) stop('At least six exposure measurements are required.', call. = FALSE)
+  if (n > 30L) stop('UT for n > 30 has not been independently verified; diagnostic unavailable.', call. = FALSE)
+  if (length(unique(ed)) == 1L) stop('Constant exposures require a separate assessment; Shapiro-Wilk is not applicable.', call. = FALSE)
+  s <- une689_statistics(ed)
+  p <- une689_normality_test(ed)
+  ut <- une689_ut(n)
+  model <- c('Normal', 'Lognormal')
+  lsc <- c(une689_lsc('Normal', ut, MA = s$MA, DS = s$DS),
+           une689_lsc('Lognormal', ut, MG = s$MG, DSG = s$DSG))
+  ur <- c(une689_ur('Normal', vla, MA = s$MA, DS = s$DS),
+          une689_ur('Lognormal', vla, MG = s$MG, DSG = s$DSG))
+  pv <- c(p$pval_normal, p$pval_lognormal)
+  acceptable <- pv > alpha
+  decision <- ifelse(ur >= ut, 'CONFORMITY', 'NON-CONFORMITY')
+  # Decisions for rejected models are displayed for comparison only.
+  models <- data.frame(model = model, p_value = pv, not_rejected = acceptable,
+                       ut = rep(ut, 2L), lsc = lsc, ur = ur,
+                       mathematical_decision = decision, stringsAsFactors = FALSE)
+  discordant <- all(acceptable) && length(unique(decision)) > 1L
+  list(models = models, discordant = discordant,
+       requires_review = discordant || !all(acceptable),
+       note = 'Diagnostic only: model selection and GES validation require assessor review.')
 }

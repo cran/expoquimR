@@ -70,27 +70,35 @@ expoquimr_report <- function(coshh     = NULL,
                               lang      = .expoquimR_state$lang,
                               open      = TRUE) {
 
+  if (!is.character(lang) || length(lang) != 1L || is.na(lang) ||
+      !lang %in% c("en", "es")) {
+    stop("lang must be 'en' or 'es'.", call. = FALSE)
+  }
+  old_lang <- .expoquimR_state$lang
+  on.exit(.expoquimR_state$lang <- old_lang, add = TRUE)
+
   for (pkg in c("rmarkdown", "knitr", "kableExtra")) {
     if (!requireNamespace(pkg, quietly = TRUE)) {
       stop(
-        sprintf("Package '%s' is required to generate reports. ", pkg),
-        sprintf("Install it with: install.packages('%s')", pkg),
+        if (identical(lang, "es")) sprintf("Se necesita el paquete '%s' para generar informes. ", pkg) else sprintf("Package '%s' is required to generate reports. ", pkg),
+        if (identical(lang, "es")) sprintf("Inst\u00e1lalo con: install.packages('%s')", pkg) else sprintf("Install it with: install.packages('%s')", pkg),
         call. = FALSE
       )
     }
   }
 
   if (is.null(coshh) && is.null(inrs) && is.null(une689)) {
-    stop("At least one of 'coshh', 'inrs' or 'une689' must be supplied.",
+    stop(if (identical(lang, "es")) "Debes proporcionar al menos uno de los resultados: coshh, inrs o une689." else "At least one of 'coshh', 'inrs' or 'une689' must be supplied.",
          call. = FALSE)
   }
 
   template <- system.file("rmd", "report_template.Rmd", package = "expoquimR")
   if (!nzchar(template)) {
-    stop("Report template not found inside the expoquimR package.",
+    stop(if (identical(lang, "es")) "No se ha encontrado la plantilla de informe en expoquimR." else "Report template not found inside the expoquimR package.",
          call. = FALSE)
   }
 
+  output <- .ensure_html_extension(output)
   output <- normalizePath(output, mustWork = FALSE)
 
   rmarkdown::render(
@@ -108,7 +116,7 @@ expoquimr_report <- function(coshh     = NULL,
     quiet  = TRUE
   )
 
-  message("Report saved to: ", output)
+  message(if (identical(lang, "es")) "Informe guardado en: " else "Report saved to: ", output)
 
   if (isTRUE(open)) {
     utils::browseURL(output)
@@ -116,3 +124,10 @@ expoquimr_report <- function(coshh     = NULL,
 
   invisible(output)
 }
+
+# ---- rOpenSci statistical standards ----
+#' @srrstats {G4.0} HTML report output filenames are normalised automatically; `.html` is appended when the user supplies a filename without an extension.
+#' @srrstats {EA5.2} Numeric values presented through Shiny and rendered reports are explicitly formatted using round(), sprintf(), knitr table precision, DT numeric formatting, or the controlled graphical digits parameter rather than relying on default numeric printing.
+#' @noRd
+NULL
+# ---- end rOpenSci statistical standards ----
